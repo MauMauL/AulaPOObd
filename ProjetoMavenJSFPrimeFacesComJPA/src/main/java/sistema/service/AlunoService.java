@@ -7,6 +7,7 @@ import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
 import javax.persistence.Query;
 
+
 import sistema.modelos.Aluno;
 
 
@@ -29,8 +30,25 @@ public class AlunoService {
 	    em.close();
 		
 	}
-	
-	
+	public void removeAluno(Aluno aluno)
+	{
+		EntityManager em = emf.createEntityManager();
+		em.getTransaction().begin();	
+		aluno = em.find(Aluno.class, aluno.getMatricula());                    
+		em.remove(aluno);
+		em.getTransaction().commit();	
+	    em.close();
+		
+	}
+	public void editaAluno(Aluno aluno)
+	{
+		EntityManager em = emf.createEntityManager();
+		em.getTransaction().begin();	
+		em.merge(aluno);                   
+		em.getTransaction().commit();	
+	    em.close();
+		
+	}
 	@SuppressWarnings("unchecked")
 	public List <Aluno> getAlunos()
 	{
@@ -45,6 +63,5 @@ public class AlunoService {
 		return alunos;
 		
 	}
-	
 	
 }

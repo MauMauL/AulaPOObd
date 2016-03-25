@@ -28,7 +28,25 @@ private EntityManagerFactory emf;
 	    em.close();
 		
 	}
-	
+	public void removeProfessor(Professor professor)
+	{
+		EntityManager em = emf.createEntityManager();
+		em.getTransaction().begin();	
+		professor = em.find(Professor.class, professor.getCodigo());                    
+		em.remove(professor);
+		em.getTransaction().commit();	
+	    em.close();
+		
+	}
+	public void editaProfessor(Professor professor)
+	{
+		EntityManager em = emf.createEntityManager();
+		em.getTransaction().begin();	
+		em.merge(professor);                   
+		em.getTransaction().commit();	
+	    em.close();
+		
+	}
 	
 	@SuppressWarnings("unchecked")
 	public List <Professor> getProfessores()

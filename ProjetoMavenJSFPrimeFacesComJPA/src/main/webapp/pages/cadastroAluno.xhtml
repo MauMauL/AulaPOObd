@@ -31,23 +31,46 @@
 	                 update=":formAluno, :tabelaAluno"
 	                 />
        </h:form>
-	
+
+
    <p:dataTable value="#{alunoManagedBean.alunos}"
                 var="aux"
-                id="tabelaAluno"
-   >
+                editable="true" id="tabelaAluno"
+                selectionMode="single" 
+                selection="#{alunoManagedBean.alunoSelecionado}" 
+                 rowKey="#{aux.matricula}">
+           
+           <p:ajax event="rowSelect"   listener="#{alunoManagedBean.onRowSelect}" 
+           />
+           <p:ajax event="rowUnselect" listener="#{alunoManagedBean.onRowUnselect}" 
+           />
+                 
       <p:column headerText="#{msg['pages.cadastroAluno.matricula']}">
         <p:outputLabel value="#{aux.matricula}" />
       </p:column>
+      
       <p:column headerText="#{msg['pages.cadastroAluno.nome']}">
-        <p:outputLabel value="#{aux.nome}" />
+      <p:cellEditor>
+					<f:facet name="output">
+						<p:outputLabel value="#{aux.nome}" />
+					</f:facet>
+					<f:facet name="input">
+						<p:inputText id="modelInput" value="#{aux.nome}"
+							style="width:100%" />
+					</f:facet>
+				</p:cellEditor>
+       <!-- <p:outputLabel value="#{aux.nome}" /> -->
       </p:column>
       <p:column headerText="#{msg['pages.cadastroAluno.curso']}">
-        <p:outputLabel value="#{aux.curso}" />
+       <p:outputLabel value="#{aux.curso}" />
       </p:column>
-      
-   </p:dataTable>	
-	   
+      	<p:column style="width:70px" headerText="Opções">
+					<p:rowEditor />
+					<p:commandLink id="remover" styleClass="ui-icon ui-icon-trash"
+						style="text-align:center" actionListener="#{alunoManagedBean.remove(aux)}" 
+						update = ":tabelaAluno"/>		
+			</p:column>
+   </p:dataTable>	   
 	</ui:define>
 </ui:composition>
 
