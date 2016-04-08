@@ -1,42 +1,28 @@
 package sistema.beans;
 
-import java.util.ArrayList;
 import java.util.List;
-
 import javax.faces.bean.ManagedBean;
-import javax.faces.bean.SessionScoped;
-
-import org.primefaces.event.SelectEvent;
-
-
+import javax.faces.bean.ViewScoped;
+import org.primefaces.event.RowEditEvent;
 import sistema.modelos.Aluno;
 import sistema.service.AlunoService;
 
 @ManagedBean
-@SessionScoped
+@ViewScoped
 public class AlunoManagedBean {
 	
 	private Aluno aluno = new Aluno();
-	private Aluno alunoSelecionado;
+	private List<Aluno> alunos;
 	private AlunoService service = new AlunoService();
 	
-	public Aluno getAlunoSelecionado() {
-		return alunoSelecionado;
-	}
-	public void setAlunoSelecionado(Aluno alunoSelecionado) {
-		this.alunoSelecionado = alunoSelecionado;
-	}
-	public void onRowSelect(SelectEvent event) {
-	     System.out.println("Evento Select: alunoSelecionado : " +  (Aluno) event.getObject());
-	}
-	
-	public void onRowUnselect(SelectEvent event) {
-		System.out.println("Evento UnSelect " +  (Aluno) event.getObject());
-			 
-    }
 	public void salvar()
 	{
 		service.salvar(aluno);
+		
+		if (alunos != null)
+		{
+			alunos.add(aluno);
+		}
 		aluno = new Aluno();
 		
 	}
@@ -48,15 +34,24 @@ public class AlunoManagedBean {
 	public void setAluno(Aluno aluno) {
 		this.aluno = aluno;
 	}
-
-	public List<Aluno> getAlunos() {
-		return service.getAlunos();
-	}
 	public void remove(Aluno aluno)
 	{
 		service.removeAluno(aluno);
+		alunos.remove(aluno);
 	}
+	public void onRowEdit(RowEditEvent event) {
 
+		Aluno a = ((Aluno) event.getObject());
+		service.editaAluno(a);
+	}
+	public List<Aluno> getAlunos() {
+		if (alunos == null)
+		{
+			alunos = service.getAlunos();
+		}
+
+		return alunos;
+	}
 	
 	
 	

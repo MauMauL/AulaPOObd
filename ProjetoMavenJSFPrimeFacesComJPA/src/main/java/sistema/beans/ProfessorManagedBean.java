@@ -1,42 +1,30 @@
 package sistema.beans;
-
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.faces.bean.ManagedBean;
-import javax.faces.bean.SessionScoped;
+import javax.faces.bean.ViewScoped;
 
-import org.primefaces.event.SelectEvent;
+import org.primefaces.event.RowEditEvent;
 
 import sistema.modelos.Professor;
 import sistema.service.ProfessorService;
 
 @ManagedBean
-@SessionScoped
+@ViewScoped
 public class ProfessorManagedBean 
 {
 
 	private Professor professor = new Professor();
 	private ProfessorService service = new ProfessorService();
-	private Professor professorSelecionado;
+	private List<Professor> professores;
 	
-	public Professor getProfessorSelecionado() {
-		return professorSelecionado;
-	}
-	public void setProfessorSelecionado(Professor professorSelecionado) {
-		this.professorSelecionado = professorSelecionado;
-	}
-	public void onRowSelect(SelectEvent event) {
-	     System.out.println("Evento Select: professorSelecionado : " +  (Professor) event.getObject());
-	}
-	
-	public void onRowUnselect(SelectEvent event) {
-		System.out.println("Evento UnSelect " +  (Professor) event.getObject());
-			 
-    }
 	public void salvar()
 	{
 		service.salvar(professor);
+		if (professores != null)
+		{
+			professores.add(professor);
+		}
 		professor = new Professor();		
 	}
 
@@ -47,16 +35,24 @@ public class ProfessorManagedBean
 	public void setProfessor(Professor professor) {
 		this.professor = professor;
 	}
-
-	public List<Professor> getProfessores() {
-		return service.getProfessores();
-	}
 	
 	public void remove(Professor professor)
 	{
 		service.removeProfessor(professor);
-		
+		professores.remove(professor);
 	}
-	
+	public void onRowEdit(RowEditEvent event) {
+
+		Professor p = ((Professor) event.getObject());
+		service.editaProfessor(p);
+	}
+	public List<Professor> getProfessores() {
+		if (professores == null)
+		{
+			professores = service.getProfessores();
+		}
+
+		return professores;
+	}
 	
 }

@@ -13,7 +13,7 @@ import sistema.modelos.Aluno;
 
 public class AlunoService {
 
-	private EntityManagerFactory emf;
+	private static EntityManagerFactory emf;
 	
 	public AlunoService()
 	{

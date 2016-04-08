@@ -18,8 +18,6 @@
 	  
 	  <h:form id="formProfessor">	
 	  <p:panelGrid columns="2">
-      <p:outputLabel value="#{msg['pages.cadastroProfessor.codigo']}" />
-      <p:inputText value="#{professorManagedBean.professor.codigo}"/>
 	  <p:outputLabel value="#{msg['pages.cadastroProfessor.nome']}" />
       <p:inputText value="#{professorManagedBean.professor.nome}"/>
       <p:outputLabel value="#{msg['pages.cadastroProfessor.curso']}" />
@@ -27,23 +25,54 @@
 	  </p:panelGrid>
 	  <p:commandButton value="#{msg['pages.cadastroProfessor.btnSalvar']}" 
 	                 action="#{professorManagedBean.salvar}"
-	                 update=":formProfessor, :tabelaProfessor"
+	                 update=":formProfessor, :formTableProfessor:tabelaProfessor"
 	                 />
        </h:form>
 	
+	<br/>
+<h:form id="formTableProfessor">
    <p:dataTable value="#{professorManagedBean.professores}"
                 var="aux"
                 id="tabelaProfessor"
+                editable="true" 
+                rows="5"
+                 paginator="true"
+                paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} 
+                {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                rowsPerPageTemplate="5,10,15"
+                emptyMessage="#{msg['pages.cadastroProfessor.filterMSG']}"
    >
-      <p:column headerText="#{msg['pages.cadastroProfessor.codigo']}">
+   <p:ajax event="rowEdit" listener="#{professorManagedBean.onRowEdit}" update="tabelaProfessor" />
+   
+      <p:column headerText="#{msg['pages.cadastroProfessor.codigo']}" filterBy="#{aux.codigo}">
         <p:outputLabel value="#{aux.codigo}" />
       </p:column>
-      <p:column headerText="#{msg['pages.cadastroProfessor.nome']}">
-        <p:outputLabel value="#{aux.nome}" />
+      
+      <p:column headerText="#{msg['pages.cadastroProfessor.nome']}" filterBy="#{aux.nome}">
+      <p:cellEditor>
+					<f:facet name="output">
+						<p:outputLabel value="#{aux.nome}" />
+					</f:facet>
+					<f:facet name="input">
+						<p:inputText id="professorNome" value="#{aux.nome}"
+							style="width:100%" />
+					</f:facet>
+				</p:cellEditor>
       </p:column>
-      <p:column headerText="#{msg['pages.cadastroProfessor.curso']}">
-        <p:outputLabel value="#{aux.curso}" />
+      
+      <p:column headerText="#{msg['pages.cadastroProfessor.curso']}" filterBy="#{aux.curso}">
+       <p:cellEditor>
+					<f:facet name="output">
+						<p:outputLabel value="#{aux.curso}" />
+					</f:facet>
+					<f:facet name="input">
+						<p:inputText id="professorCurso" value="#{aux.curso}"
+							style="width:100%" />
+					</f:facet>
+				</p:cellEditor>
       </p:column>
+      
+      
       <p:column style="width:70px" headerText="Opções">
 					<p:rowEditor />
 					<p:commandLink id="remover" styleClass="ui-icon ui-icon-trash"
@@ -53,6 +82,7 @@
 			</p:column>
       
    </p:dataTable>	
+      </h:form>
 	   
 	</ui:define>
 </ui:composition>

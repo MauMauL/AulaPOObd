@@ -19,8 +19,6 @@
 	  
 	  <h:form id="formAluno">	
 	  <p:panelGrid columns="2">
-      <p:outputLabel value="#{msg['pages.cadastroAluno.matricula']}" />
-      <p:inputText value="#{alunoManagedBean.aluno.matricula}"/>
 	  <p:outputLabel value="#{msg['pages.cadastroAluno.nome']}" />
       <p:inputText value="#{alunoManagedBean.aluno.nome}"/>
       <p:outputLabel value="#{msg['pages.cadastroAluno.curso']}" />
@@ -28,49 +26,62 @@
 	  </p:panelGrid>
 	  <p:commandButton value="#{msg['pages.cadastroAluno.btnSalvar']}" 
 	                 action="#{alunoManagedBean.salvar}"
-	                 update=":formAluno, :tabelaAluno"
+	                 update=":formAluno, :formTableAluno:tabelaAluno"
 	                 />
        </h:form>
+       
+       <br/>
 
-
+<h:form id="formTableAluno">
    <p:dataTable value="#{alunoManagedBean.alunos}"
                 var="aux"
-                editable="true" id="tabelaAluno"
-                selectionMode="single" 
-                selection="#{alunoManagedBean.alunoSelecionado}" 
-                 rowKey="#{aux.matricula}">
+                editable="true" 
+                id="tabelaAluno"
+                rows="5"
+                paginator="true"
+                paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} 
+                {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                rowsPerPageTemplate="5,10,15"
+                emptyMessage="#{msg['pages.cadastroAluno.filterMSG']}">
            
-           <p:ajax event="rowSelect"   listener="#{alunoManagedBean.onRowSelect}" 
-           />
-           <p:ajax event="rowUnselect" listener="#{alunoManagedBean.onRowUnselect}" 
-           />
-                 
-      <p:column headerText="#{msg['pages.cadastroAluno.matricula']}">
-        <p:outputLabel value="#{aux.matricula}" />
+     <p:ajax event="rowEdit" listener="#{alunoManagedBean.onRowEdit}" update="tabelaAluno" />
+     
+      <p:column headerText="#{msg['pages.cadastroAluno.matricula']}" filterBy="#{aux.matricula}">
+       <p:outputLabel value="#{aux.matricula}"/>
       </p:column>
       
-      <p:column headerText="#{msg['pages.cadastroAluno.nome']}">
+      <p:column headerText="#{msg['pages.cadastroAluno.nome']}" filterBy="#{aux.nome}">
       <p:cellEditor>
 					<f:facet name="output">
 						<p:outputLabel value="#{aux.nome}" />
 					</f:facet>
 					<f:facet name="input">
-						<p:inputText id="modelInput" value="#{aux.nome}"
+						<p:inputText id="alunoNome" value="#{aux.nome}"
 							style="width:100%" />
 					</f:facet>
 				</p:cellEditor>
-       <!-- <p:outputLabel value="#{aux.nome}" /> -->
       </p:column>
-      <p:column headerText="#{msg['pages.cadastroAluno.curso']}">
-       <p:outputLabel value="#{aux.curso}" />
+      
+      <p:column headerText="#{msg['pages.cadastroAluno.curso']}" filterBy="#{aux.curso}">
+      <p:cellEditor>
+      <f:facet name="output">
+      <p:outputLabel value="#{aux.curso}" />
+      </f:facet>
+      <f:facet name="input">
+      <p:inputText id = "alunoCurso" value = "#{aux.curso}" style = "width: 100%"/>
+      </f:facet>
+      </p:cellEditor>
       </p:column>
+      	
       	<p:column style="width:70px" headerText="Opções">
 					<p:rowEditor />
 					<p:commandLink id="remover" styleClass="ui-icon ui-icon-trash"
 						style="text-align:center" actionListener="#{alunoManagedBean.remove(aux)}" 
-						update = ":tabelaAluno"/>		
+						update = "tabelaAluno"/>		
 			</p:column>
-   </p:dataTable>	   
+			
+   </p:dataTable>	
+   </h:form>   
 	</ui:define>
 </ui:composition>
 
