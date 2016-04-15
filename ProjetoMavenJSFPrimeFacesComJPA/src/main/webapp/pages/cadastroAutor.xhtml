@@ -47,7 +47,7 @@
            <p:ajax event="rowEdit"     listener="#{autorManagedBean.onRowEdit}"   
              update=":formTableLivros:tableLivros" /> 
 
-			<p:column headerText="#{msg['pages.cadastroAutor.codigo']}">
+			<p:column headerText="#{msg['pages.cadastroAutor.codigo']}" filterBy="#{a.codigo}">
 				<h:outputText value="#{a.codigo}" />
 			</p:column>
 
@@ -84,7 +84,7 @@
 				<h:outputText value="#{liv.codigo}" />
 			</p:column>
 
-			<p:column headerText="#{msg['pages.cadastroFornecedor.livro.nome']}">
+			<p:column headerText="#{msg['pages.cadastroAutor.livro.nome']}">
 						<p:outputLabel value="#{liv.nome}" />
 			</p:column>
 

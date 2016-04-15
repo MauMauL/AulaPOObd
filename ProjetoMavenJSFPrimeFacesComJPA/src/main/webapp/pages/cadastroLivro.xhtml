@@ -19,7 +19,7 @@
 
 		<p:panelGrid columns="2">
 			<p:outputLabel value="#{msg['pages.cadastroLivro.nome']}" />
-			<p:inputText value="#{produtoManagedBean.livro.nome}" />
+			<p:inputText value="#{livroManagedBean.livro.nome}" />
 
 			<p:outputLabel value="#{msg['pages.cadastroLivro.autor.nome']}" />
 			<p:selectOneMenu value="#{livroManagedBean.autor}"
@@ -29,13 +29,13 @@
 					itemValue="#{aux}" itemLabel="#{aux.nome}" />
 			</p:selectOneMenu>
 
-
 			<p:outputLabel value="#{msg['pages.cadastroLivro.valor']}" />
-			<p:inputText value="#{produtoManagedBean.livro.valor}" />
+			<p:inputText value="#{livroManagedBean.livro.valor}" />
 
 
 		</p:panelGrid>
-		<p:commandButton value="#{msg['pages.cadastroLivro.btnSalvar']}" action="#{livroManagedBean.salvar}"
+		<p:commandButton value="#{msg['pages.cadastroLivro.btnSalvar']}" 
+		action="#{livroManagedBean.salvar}"
 			update=":formLivros, :formTableLivros:tableLivros" />
 	</h:form>
 
@@ -43,12 +43,10 @@
     
 	<h:form id="formTableLivros">
     
-		<p:dataTable value="#{produtoManagedBean.livros}" var="liv"
-			editable="true" id="tableLivros">
+		<p:dataTable value="#{livroManagedBean.livros}" var="liv" id="tableLivros">
 
-     
 
-			<p:column headerText="#{msg['pages.cadastroLivro.codigo']}">
+			<p:column headerText="#{msg['pages.cadastroLivro.codigo']}" filterBy="#{liv.codigo}">
 				<h:outputText value="#{liv.codigo}" />
 			</p:column>
 
@@ -58,13 +56,13 @@
 						<p:outputLabel value="#{liv.nome}" />
 					</f:facet>
 					<f:facet name="input">
-						<p:inputText id="descricao" value="#{prod.descricao}"
+						<p:inputText id="nome" value="#{liv.nome}"
 							style="width:100%" />
 					</f:facet>
 				</p:cellEditor>
 			</p:column>
 
-			<p:column headerText="#{msg['pages.cadastroProduto.autor.nome']}">
+			<p:column headerText="#{msg['pages.cadastroLivro.autor.nome']}">
 				<p:cellEditor>
 					<f:facet name="output">
 						<p:outputLabel value="#{liv.autor.nome}" />
@@ -101,10 +99,7 @@
 					<p:commandLink id="remover" styleClass="ui-icon ui-icon-trash"
 						style="text-align:center"
 						actionListener="#{livroManagedBean.remove(liv)}"
-						update="tableLivros" />
-
-
-
+						update="tableLivros"/>
 			</p:column>
 		</p:dataTable>
 	</h:form>
