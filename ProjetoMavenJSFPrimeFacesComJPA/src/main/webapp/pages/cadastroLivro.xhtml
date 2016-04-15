@@ -1,0 +1,113 @@
+
+<ui:composition template="templateMenu.xhtml"
+	xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:ui2="http://java.sun.com/jsf/facelets"
+	xmlns:tm="http://java.sun.com/jsf/composite/terminal/1_0/components">
+	
+	<ui:define name="title">
+		<h:outputText value="#{msg['pages.cadastroLivro.title']}" />
+	</ui:define>
+	
+	<ui:define name="principal">
+	
+	<h1><p:outputLabel value="#{msg['pages.cadastroLivro.menu']}" /> </h1>
+ 	<h:form id="formLivros">
+
+		<p:panelGrid columns="2">
+			<p:outputLabel value="#{msg['pages.cadastroLivro.nome']}" />
+			<p:inputText value="#{produtoManagedBean.livro.nome}" />
+
+			<p:outputLabel value="#{msg['pages.cadastroLivro.autor.nome']}" />
+			<p:selectOneMenu value="#{livroManagedBean.autor}"
+				converter="converterAutor">
+				<f:selectItem itemValue="" itemLabel="#{msg['pages.cadastroLivro.autor.msg']}" />
+				<f:selectItems value="#{livroManagedBean.autores}" var="aux"
+					itemValue="#{aux}" itemLabel="#{aux.nome}" />
+			</p:selectOneMenu>
+
+
+			<p:outputLabel value="#{msg['pages.cadastroLivro.valor']}" />
+			<p:inputText value="#{produtoManagedBean.livro.valor}" />
+
+
+		</p:panelGrid>
+		<p:commandButton value="#{msg['pages.cadastroLivro.btnSalvar']}" action="#{livroManagedBean.salvar}"
+			update=":formLivros, :formTableLivros:tableLivros" />
+	</h:form>
+
+    <h3><p:outputLabel value="#{msg['pages.cadastroLivro.tableTitle']}" /> </h3>
+    
+	<h:form id="formTableLivros">
+    
+		<p:dataTable value="#{produtoManagedBean.livros}" var="liv"
+			editable="true" id="tableLivros">
+
+     
+
+			<p:column headerText="#{msg['pages.cadastroLivro.codigo']}">
+				<h:outputText value="#{liv.codigo}" />
+			</p:column>
+
+			<p:column headerText="#{msg['pages.cadastroLivro.nome']}">
+				<p:cellEditor>
+					<f:facet name="output">
+						<p:outputLabel value="#{liv.nome}" />
+					</f:facet>
+					<f:facet name="input">
+						<p:inputText id="descricao" value="#{prod.descricao}"
+							style="width:100%" />
+					</f:facet>
+				</p:cellEditor>
+			</p:column>
+
+			<p:column headerText="#{msg['pages.cadastroProduto.autor.nome']}">
+				<p:cellEditor>
+					<f:facet name="output">
+						<p:outputLabel value="#{liv.autor.nome}" />
+					</f:facet>
+					<f:facet name="input">
+						<p:selectOneMenu value="#{liv.autor}"
+							converter="converterAutor" style="width:100%">
+							<f:selectItem itemValue="" 
+							itemLabel="#{msg['pages.cadastroLivro.autor.msg']}" />
+							<f:selectItems value="#{livroManagedBean.autores}"
+								var="aux" itemValue="#{aux}" itemLabel="#{aux.nome}" />
+						</p:selectOneMenu>
+
+					</f:facet>
+				</p:cellEditor>
+			</p:column>
+
+			<p:column headerText="#{msg['pages.cadastroLivro.valor']}">
+				  <p:cellEditor>
+					<f:facet name="output">
+						<p:outputLabel value="#{liv.valor}" />
+					</f:facet>
+					<f:facet name="input">
+						<p:inputText id="valor" value="#{liv.valor}" style="width:100%" />
+					</f:facet>
+				</p:cellEditor>
+			</p:column>
+
+			<p:column style="width:70px" headerText="Opções">
+
+
+					<p:rowEditor />
+					
+					<p:commandLink id="remover" styleClass="ui-icon ui-icon-trash"
+						style="text-align:center"
+						actionListener="#{livroManagedBean.remove(liv)}"
+						update="tableLivros" />
+
+
+
+			</p:column>
+		</p:dataTable>
+	</h:form>
+
+	</ui:define>
+</ui:composition>
